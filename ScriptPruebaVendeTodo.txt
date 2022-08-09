@@ -1,0 +1,326 @@
+CREATE TABLE empleados (
+    id_empleado number(10) NOT NULL,
+    nombre varchar(15) NOT NULL,
+    apellido varchar(15) NOT NULL,
+    fecha_nacimiento date NOT NULL,
+    direccion varchar(50) NOT NULL,
+    region varchar(50) NOT NULL,
+    ciudad varchar(50) NOT NULL,
+    pais varchar(50) NOT NULL,
+    telefono number(30) NOT NULL,
+    cargo varchar(50) NOT NULL,
+    PRIMARY KEY (id_empleado)
+);
+
+CREATE TABLE clientes (
+    id_cliente number(10) NOT NULL,
+    nombre_empresa varchar(50) NOT NULL,
+    nombre_contacto varchar(50) NOT NULL,
+    email varchar(30) NOT NULL,
+    direccion varchar(30) NOT NULL,
+    region varchar(25) NOT NULL,
+    ciudad varchar(30) NOT NULL,
+    pais varchar(30) NOT NULL,
+    codigo_postal numeric(30) NOT NULL,
+    telefono number(30) NOT NULL,
+    PRIMARY KEY (id_cliente)
+);
+
+CREATE TABLE despachadores (
+    id_despachador number(30)NOT NULL,
+    nombre varchar(50) NOT NULL,
+    telefono_empresa number(30) NOT NULL,
+    PRIMARY KEY (id_despachador)
+);
+
+
+CREATE TABLE categoria (
+    id_categoria number(30) NOT NULL,
+    nombre_categoria varchar(50) NOT NULL,
+    PRIMARY KEY (id_categoria)
+);
+
+
+CREATE TABLE proveedores (
+    id_proveedor numeric(30) NOT NULL,
+    nombre_compania varchar(50) NOT NULL,
+    nombre_contacto varchar(50) NOT NULL,
+    direccion varchar(50) NOT NULL,
+    region varchar(50) NOT NULL,
+    ciudad varchar(50) NOT NULL,
+    telefono numeric(30) NOT NULL,
+    PRIMARY KEY (id_proveedor)
+);
+
+CREATE TABLE productos (
+    id_producto numeric(30) NOT NULL,
+    precio integer NOT NULL,
+    stock numeric(30) NOT NULL,
+    descontinuado varchar(15) NOT NULL,
+    id_categoria numeric(30) NOT NULL,
+    id_proveedor numeric(30) NOT NULL,
+    PRIMARY KEY (id_producto)
+);
+
+
+CREATE TABLE compras (
+    id_compra numeric(30) NOT NULL,
+    valor_compra integer NOT NULL,
+    cantidad_productos numeric(30) NOT NULL,
+    descuentos integer NOT NULL,
+    PRIMARY KEY (id_compra)
+);
+
+
+CREATE TABLE orden_de_compra (
+    cantidad numeric(30) NOT NULL,
+    id_producto numeric(30) NOT NULL,
+    id_orden numeric(30) NOT NULL
+);
+
+
+CREATE TABLE ordenes (
+    id_orden numeric(30) NOT NULL,
+    fecha_requerimiento date NOT NULL,
+    fecha_envio date NOT NULL,
+    nombre_receptor varchar(30) NOT NULL,
+    direccion varchar(50) NOT NULL,
+    codigo_postal numeric(30) NOT NULL,
+    ciudad varchar(30) NOT NULL,
+    region varchar(30) NOT NULL,
+    pais varchar(30) NOT NULL,
+    metodo_envio varchar(30) NOT NULL,
+    id_compra numeric(30) NOT NULL,
+    id_empleado numeric(30) NOT NULL,
+    id_cliente numeric(30) NOT NULL,
+    id_despachador numeric(30) NOT NULL,
+    PRIMARY KEY (id_orden)
+);
+
+/*Insertar las llaves foraneas*/
+
+ALTER TABLE productos ADD CONSTRAINT FK_productos__id_categoria FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria);
+ALTER TABLE productos ADD CONSTRAINT FK_productos__id_proveedor FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor);
+ALTER TABLE orden_de_compra ADD CONSTRAINT FK_orden_de_compra_id_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto);
+ALTER TABLE ordenes ADD CONSTRAINT FK_ordenes__id_compra FOREIGN KEY (id_compra) REFERENCES compras(id_compra);
+ALTER TABLE ordenes ADD CONSTRAINT FK_ordenes__id_empleado FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado);
+ALTER TABLE ordenes ADD CONSTRAINT FK_ordenes__id_despachador FOREIGN KEY (id_despachador) REFERENCES despachadores(id_despachador);
+
+
+/*Realiza 5 inserciones a cada tabla*/
+
+INSERT INTO CLIENTES (id_cliente, nombre_empresa, nombre_contacto, email, direccion, region, ciudad, pais, codigo_postal, telefono)
+VALUES(1, 'Hites', 'Basement', 'compras@hites.cl', 'paseo ahumada 554', 'Metropolitana', 'Santiago', 'Chile', 9000987, 223456873);
+COMMIT;
+
+INSERT INTO CLIENTES (id_cliente, nombre_empresa, nombre_contacto, email, direccion, region, ciudad, pais, codigo_postal, telefono)
+VALUES(2, 'Falabella', 'Juanito Perez', 'ventas@falabella.cl', 'Los Leones 556', 'Metropolitana', 'Santiago', 'Chile', 900564, 229867354);
+COMMIT;
+
+INSERT INTO CLIENTES (id_cliente, nombre_empresa, nombre_contacto, email, direccion, region, ciudad, pais, codigo_postal, telefono)
+VALUES(3, 'Tricot', 'David Valenzuela', 'ventas@hites.cl', 'Alameda 786', 'Metropolitana', 'Samtiago', 'chile', 9007654, 93467843);
+COMMIT;
+
+INSERT INTO CLIENTES (id_cliente, nombre_empresa, nombre_contacto, email, direccion, region, ciudad, pais, codigo_postal, telefono)
+VALUES(4, 'Paris', 'alberto concha', 'aconcha@paris.cl', 'los lirios 2940', 'Valparaiso', 'Valparaiso', 'chile', 90067543, 987653083);
+COMMIT;
+
+INSERT INTO CLIENTES (id_cliente, nombre_empresa, nombre_contacto, email, direccion, region, ciudad, pais, codigo_postal, telefono)
+    VALUES(5, 'Jhonson', 'Juaquin Saez', 'jpcompras@jh.cl', 'balmaceda 678', 'Cordillerana', 'puente alto', 'chile', 90089964, 98673356);
+COMMIT;
+
+savepoint despachadores;
+
+INSERT INTO DESPACHADORES (id_despachador, nombre, telefono_empresa)
+VALUES(1, 'Juan Bustamante', '997567395' );
+COMMIT;
+
+INSERT INTO DESPACHADORES (id_despachador, nombre, telefono_empresa)
+VALUES(2, 'German Guzman', '09876570' );
+COMMIT;
+
+INSERT INTO DESPACHADORES (id_despachador, nombre, telefono_empresa)
+VALUES(3, 'Pedro Rosas', '678893244' );
+COMMIT;
+
+INSERT INTO DESPACHADORES (id_despachador, nombre, telefono_empresa)
+VALUES(4, 'Camilo Diaz', '246754256' );
+COMMIT;
+
+INSERT INTO DESPACHADORES (id_despachador, nombre, telefono_empresa)
+VALUES(5, 'Angel Puig', '2356786363' );
+COMMIT;
+
+savepoint categoria;
+
+INSERT INTO CATEGORIA (id_categoria, nombre_categoria)
+VALUES(1, 'Retail');
+COMMIT;
+
+INSERT INTO CATEGORIA (id_categoria, nombre_categoria)
+VALUES(2, 'Vestuario');
+COMMIT;
+
+INSERT INTO CATEGORIA (id_categoria, nombre_categoria)
+VALUES(3, 'Productos hogar');
+COMMIT;
+
+INSERT INTO CATEGORIA (id_categoria, nombre_categoria)
+VALUES(4, 'Vestuario');
+COMMIT;
+
+INSERT INTO CATEGORIA (id_categoria, nombre_categoria)
+VALUES(5, 'Vestuario');
+COMMIT;
+
+savepoint proveedores;
+
+INSERT INTO PROVEEDORES (id_proveedor, nombre_compania, nombre_contacto, direccion, region, ciudad, telefono)
+VALUES(1, 'Versache', 'Maria Pinto', 'Perez  986', 'Metropolitana', 'Santiago', 9876543679);
+COMMIT;
+
+INSERT INTO PROVEEDORES (id_proveedor, nombre_compania, nombre_contacto, direccion, region, ciudad, telefono)
+VALUES(2, 'Basic', 'Nicolas Díaz', 'Independencia 98554', 'Metropolitana', 'Santiago', 97754283);
+COMMIT;
+
+INSERT INTO PROVEEDORES (id_proveedor, nombre_compania, nombre_contacto, direccion, region, ciudad, telefono)
+VALUES(3, 'Wadoo', 'Fernando Jimenez', 'el peral 234', 'Metropolitana', 'Santiago', 908765893);
+COMMIT;
+
+INSERT INTO PROVEEDORES (id_proveedor, nombre_compania, nombre_contacto, direccion, region, ciudad, telefono)
+VALUES(4, 'Levis', 'Johs Warner', 'Juan Rosales 876', 'Metropolitana', 'Santiago', 098765693);
+COMMIT;
+
+INSERT INTO PROVEEDORES (id_proveedor, nombre_compania, nombre_contacto, direccion, region, ciudad, telefono)
+VALUES(5, 'Puma', 'Danwin Yan', 'Libertadores 609', 'Metropolitana', 'Santiago', 788638949);
+COMMIT;
+
+savepoint productos;
+
+INSERT INTO PRODUCTOS (id_producto, precio, stock, descontinuado, id_categoria, id_proveedor)
+VALUES (1, 10000, 5, 'no', 1, 1);
+COMMIT;
+
+INSERT INTO PRODUCTOS (id_producto, precio, stock, descontinuado, id_categoria, id_proveedor)
+VALUES (2, 36000, 45, 'no', 2, 2);
+COMMIT;
+
+INSERT INTO PRODUCTOS (id_producto, precio, stock, descontinuado, id_categoria, id_proveedor)
+VALUES (3, 20000, 100, 'no', 3, 3);
+COMMIT;
+
+INSERT INTO PRODUCTOS (id_producto, precio, stock, descontinuado, id_categoria, id_proveedor)
+VALUES (4, 450000, 200, 'no', 4, 4);
+COMMIT;
+
+INSERT INTO PRODUCTOS (id_producto, precio, stock, descontinuado, id_categoria, id_proveedor)
+VALUES (5, 700000, 10, 'no', 5, 5);
+COMMIT;
+
+savepoint compras;
+
+INSERT INTO compras (id_compra, valor_compra,  cantidad_productos, descuentos)
+VALUES(1, 1200000, 2,0);
+COMMIT;
+
+INSERT INTO compras (id_compra, valor_compra,  cantidad_productos, descuentos)
+VALUES(2, 450000, 1,0);
+COMMIT;
+
+INSERT INTO compras (id_compra, valor_compra,  cantidad_productos, descuentos)
+VALUES(3, 20000, 1,0);
+COMMIT;
+
+INSERT INTO compras (id_compra, valor_compra,  cantidad_productos, descuentos)
+VALUES(4, 432000, 12,0);
+COMMIT;
+
+INSERT INTO compras (id_compra, valor_compra,  cantidad_productos, descuentos)
+VALUES(5, 10000, 5,0);
+COMMIT;
+
+
+savepoint ordenes_de_compra;
+
+
+INSERT INTO orden_de_compra (cantidad, id_producto, id_orden)
+VALUES(2, 5, 1);
+UPDATE PRODUCTOS
+SET stock = stock-2
+WHERE id_producto = 5;
+
+INSERT INTO orden_de_compra (cantidad, id_producto, id_orden)
+VALUES(1, 4, 2);
+UPDATE PRODUCTOS
+SET stock = stock-1
+WHERE id_producto = 4;
+
+INSERT INTO orden_de_compra (cantidad, id_producto, id_orden)
+VALUES(1, 3, 3);
+UPDATE PRODUCTOS
+SET stock = stock-1
+WHERE id_producto = 3;
+
+INSERT INTO orden_de_compra (cantidad, id_producto, id_orden)
+VALUES(12, 2, 4);
+UPDATE PRODUCTOS
+SET stock = stock-12
+WHERE id_producto = 2;
+
+INSERT INTO orden_de_compra (cantidad, id_producto, id_orden)
+VALUES(5, 3, 5);
+UPDATE PRODUCTOS
+SET stock = stock-5
+WHERE id_producto = 3;
+COMMIT;
+
+SAVEPOINT ordenes;
+
+INSERT INTO ORDENES (id_orden, fecha_requerimiento, fecha_envio, nombre_receptor, direccion, codigo_postal, region, ciudad, pais, metodo_envio, id_compra, id_empleado, id_cliente, id_despachador)
+VALUES(1, TO_DATE('2020-10-14', 'YYYY-MM-DD') , TO_DATE('2020-11-24', 'YYYY-MM-DD'), 'Juan Palmo', 'calle cubito', 99746, 'Metropolitana', 'Santiago', 'Chile', 'carreta', 1, 1, 1, 1);
+COMMIT;
+
+INSERT INTO ORDENES (id_orden, fecha_requerimiento, fecha_envio, nombre_receptor, direccion, codigo_postal, region, ciudad, pais, metodo_envio, id_compra, id_empleado, id_cliente, id_despachador)
+VALUES(2, TO_DATE('2020-08-17', 'YYYY-MM-DD') , TO_DATE('2020-11-20', 'YYYY-MM-DD'), 'Aron Mercado', 'los lirios ', 99849, 'Metropolitana', 'Santiago', 'Chile', 'camion', 2, 2, 2, 2);
+COMMIT;
+
+INSERT INTO ORDENES (id_orden, fecha_requerimiento, fecha_envio, nombre_receptor, direccion, codigo_postal, region, ciudad, pais, metodo_envio, id_compra, id_empleado, id_cliente, id_despachador)
+VALUES(3, TO_DATE('2020-12-20', 'YYYY-MM-DD') , TO_DATE('2011-01-20', 'YYYY-MM-DD'), 'Padro Pablo', 'las acasias', '079', 'La cisterna', 'Viña del Mar', 'Chile', 'Avion', 3, 3, 3, 3);
+COMMIT;
+
+INSERT INTO ORDENES (id_orden, fecha_requerimiento, fecha_envio, nombre_receptor, direccion, codigo_postal, region, ciudad, pais, metodo_envio, id_compra, id_empleado, id_cliente, id_despachador)
+VALUES(4, TO_DATE('2020-08-11', 'YYYY-MM-DD') , TO_DATE('2021-01-21', 'YYYY-MM-DD'), 'johan jiug', 'pasaje 2894', 99492, 'La florida', 'Santiago', 'Chile', 'bus', 4, 4, 4, 4);
+COMMIT;
+
+INSERT INTO ORDENES (id_orden, fecha_requerimiento, fecha_envio, nombre_receptor, direccion, codigo_postal, region, ciudad, pais, metodo_envio, id_compra, id_empleado, id_cliente, id_despachador)
+VALUES(5, TO_DATE('2021-02-13', 'YYYY-MM-DD') , TO_DATE('2021-01-20', 'YYYY-MM-DD'), 'luis jara', 'Cantante', 87658, 'Metropolitana', 'santiago', 'chile', 'camion', 5, 5, 5, 5);
+COMMIT;
+/*4. Formular y ejecutar las consultas que correspondan, para obtener la siguiente
+información: a. Determinar cuál o cuáles son los clientes con las compras más altas y a qué
+ciudad corresponden los mismos. Esto permitirá en un futuro que VendeTodo
+SPA pueda buscar convenios con algunas empresas despachadoras.*/
+*.-
+
+SELECT  cms.id_compra, cl.nombre_empresa, cl.ciudad, cms.valor_compra  
+FROM CLIENTES cl
+    INNER JOIN ORDENES ord
+        ON cl.id_cliente = ord.id_cliente
+    INNER JOIN compras cms
+        ON cms.id_compra = ord.id_compra
+        ORDER BY cms.valor_compra DESC
+        FETCH FIRST 3 ROWS ONLY;
+        
+
+/*b. Se necesita saber los nombre de los distribuidores de los productos más
+vendidos, esto permitirá evaluar comprar por volumen. Solo es necesario que
+se listen los nombres de todos los registros que cumplan con la solicitud
+( 2 Puntos )*/
+*.- 
+SELECT  pro.id_proveedor, pro.nombre_compania, pro.nombre_contacto, ordc.cantidad
+FROM proveedores pro
+    INNER JOIN PRODUCTOS PROD
+    on pro.id_proveedor = prod.id_proveedor
+    INNER JOIN orden_de_compra ORDC
+    on prod.id_producto = ordc.id_producto
+    ORDER BY ordc.cantidad DESC
+    FETCH FIRST 5 ROWS ONLY;
